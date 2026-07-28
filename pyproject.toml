@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aging-alphagenome"
+version = "0.1.0"
+description = "Aging-associated locus classification with frozen AlphaGenome embeddings."
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "pyfaidx>=0.8",
+]
+
+[project.scripts]
+aging-prepare-data = "aging_alphagenome.data:main"
+aging-extract-features = "aging_alphagenome.features:main"
+aging-train-head = "aging_alphagenome.head:train_main"
+aging-score-head = "aging_alphagenome.head:score_main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
