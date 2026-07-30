@@ -13,14 +13,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_PROJECT_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 PROJECT_ROOT="${PROJECT_ROOT:-${DEFAULT_PROJECT_ROOT}}"
-ALPHAGENOME_ENV="${ALPHAGENOME_ENV:-${PROJECT_ROOT}/.venv}"
 ALPHAGENOME_CACHE="${ALPHAGENOME_CACHE:-${PROJECT_ROOT}/.cache}"
-
-if [[ ! -x "${ALPHAGENOME_ENV}/bin/python" ]]; then
-  echo "AlphaGenome environment not found: ${ALPHAGENOME_ENV}" >&2
-  echo "Run scripts/hpc/bootstrap_env.sh on the login node first." >&2
-  exit 2
-fi
 
 : "${ALPHAGENOME_CHECKPOINT_DIR:?Set ALPHAGENOME_CHECKPOINT_DIR to the downloaded fold checkpoint.}"
 
@@ -35,12 +28,12 @@ mkdir -p \
   "${JAX_COMPILATION_CACHE_DIR}" \
   "${XDG_CACHE_HOME}"
 
-source "${ALPHAGENOME_ENV}/bin/activate"
+source "${PROJECT_ROOT}/scripts/hpc/activate_env.sh"
 
 echo "Job ID:       ${SLURM_JOB_ID:-not-running-under-slurm}"
 echo "Node:         $(hostname)"
 echo "Project:      ${PROJECT_ROOT}"
-echo "Environment:  ${ALPHAGENOME_ENV}"
+echo "Environment:  ${CONDA_ENV_NAME:-${ALPHAGENOME_ENV:-}}"
 echo "Checkpoint:   ${ALPHAGENOME_CHECKPOINT_DIR}"
 echo "Started UTC:  $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 

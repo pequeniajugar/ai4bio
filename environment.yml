@@ -1,0 +1,16 @@
+name: aging-alphagenome
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - git
+  - numpy>=1.26
+  - pip:
+      # This CPU JAX entry makes the YAML self-contained. The HPC creation
+      # script upgrades it to cuda12/cuda13 or a *-local variant afterwards.
+      - pyfaidx>=0.8
+      - jax
+      - alphagenome==0.7.0
+      - huggingface_hub>=0.30
+      - git+https://github.com/google-deepmind/alphagenome_research.git@c5b51606a410b34c3e64d870ea4e034c3c0ca976

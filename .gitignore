@@ -18,6 +18,3 @@ artifacts/
 .env
 *.token
 hpc/site.env
-
-# Test files
-/tests

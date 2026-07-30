@@ -1,4 +1,4 @@
-"""Prepare hg38 sequences, matched random controls, and grouped data splits."""
+"""Prepare coordinate-only positive loci and random hg38 controls."""
 
 from __future__ import annotations
 
@@ -18,11 +18,6 @@ from typing import Protocol
 
 
 VALID_CHROMOSOME = re.compile(r"^chr(?:[1-9]|1[0-9]|2[0-2]|X|Y)$")
-# VCF REF/ALT alleles must be canonical bases for this SNV pipeline. ``N``
-# remains valid inside extracted FASTA sequence windows as an unknown base, but
-# accepting it as a labeled allele would hide malformed or unresolved records.
-VALID_ALLELE = re.compile(r"^[ACGT]+$", re.IGNORECASE)
-REQUIRED_COLUMNS = {"#CHROM", "POS", "REF", "ALT"}
 
 
 class ReferenceGenome(Protocol):
@@ -141,49 +136,39 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def read_positive_loci(path: Path) -> list[Locus]:
-    """Read the source VCF-like TSV as positive loci."""
+def read_positive_loci(path: Path, *, split: str = "") -> list[Locus]:
+    """Read only the first two TSV columns as chromosome and 1-based position."""
 
     path = path.expanduser().resolve()
     positives: list[Locus] = []
     coordinates: set[tuple[str, int]] = set()
 
     with path.open("r", encoding="utf-8", newline="") as handle:
-        reader = csv.DictReader(handle, delimiter="\t")
-        if reader.fieldnames is None:
+        reader = csv.reader(handle, delimiter="\t")
+        header = next(reader, None)
+        if header is None:
             raise ValueError("Input TSV has no header.")
-        missing = REQUIRED_COLUMNS - set(reader.fieldnames)
-        if missing:
-            raise ValueError(f"Input TSV is missing columns: {sorted(missing)}")
+        if len(header) < 2:
+            raise ValueError("Input TSV must contain at least two columns.")
 
+        id_prefix = f"POS_{split.upper()}" if split else "POS"
         for source_row, row in enumerate(reader, start=2):
-            chromosome = (row["#CHROM"] or "").strip()
+            if len(row) < 2:
+                raise ValueError(f"Line {source_row} has fewer than two columns.")
+            chromosome = row[0].strip()
             if not VALID_CHROMOSOME.fullmatch(chromosome):
                 raise ValueError(
                     f"Line {source_row} has unsupported chromosome "
                     f"{chromosome!r}."
                 )
             try:
-                position = int(row["POS"])
+                position = int(row[1])
             except ValueError as exc:
                 raise ValueError(
-                    f"Line {source_row} has a non-integer POS."
+                    f"Line {source_row} has a non-integer position."
                 ) from exc
             if position < 1:
-                raise ValueError(f"Line {source_row} has POS < 1.")
-
-            reference = (row["REF"] or "").upper()
-            alternate = (row["ALT"] or "").upper()
-            if not (
-                VALID_ALLELE.fullmatch(reference)
-                and VALID_ALLELE.fullmatch(alternate)
-            ):
-                raise ValueError(f"Line {source_row} has invalid REF/ALT.")
-            if len(reference) != 1 or len(alternate) != 1:
-                raise ValueError(
-                    "The initial pipeline supports single-nucleotide loci only; "
-                    f"line {source_row} is {reference}>{alternate}."
-                )
+                raise ValueError(f"Line {source_row} has position < 1.")
 
             coordinate = (chromosome, position)
             if coordinate in coordinates:
@@ -192,18 +177,19 @@ def read_positive_loci(path: Path) -> list[Locus]:
 
             positives.append(
                 Locus(
-                    sample_id=f"POS_{source_row - 1:05d}",
-                    pair_id=f"POS_{source_row - 1:05d}",
+                    sample_id=f"{id_prefix}_{source_row - 1:05d}",
+                    pair_id=f"{id_prefix}_{source_row - 1:05d}",
                     chromosome=chromosome,
                     position_1based=position,
                     start_0based=position - 1,
                     end_0based=position,
-                    reference=reference,
-                    alternate=alternate,
-                    gene=(row.get("Gene.refGene") or "").strip(),
+                    reference="",
+                    alternate="",
+                    gene="",
                     label=1,
                     label_type="known_positive",
                     source=path.name,
+                    split=split,
                 )
             )
 
@@ -218,9 +204,8 @@ def annotate_positive_sequences(
     biological_window: int,
     model_window: int,
 ) -> None:
-    """Validate hg38 alleles and attach biological/model sequences in place."""
+    """Attach biological/model sequences using only coordinates and hg38."""
 
-    mismatches: list[str] = []
     for locus in positives:
         if locus.chromosome not in reference.lengths:
             raise ValueError(
@@ -238,25 +223,11 @@ def annotate_positive_sequences(
         model_sequence = reference.fetch(
             locus.chromosome, model_start, model_end
         )
-        observed_reference = biological_sequence[biological_window // 2]
-        if observed_reference != locus.reference:
-            mismatches.append(
-                f"{locus.chromosome}:{locus.position_1based} "
-                f"TSV={locus.reference} FASTA={observed_reference}"
-            )
-            continue
 
+        locus.reference = biological_sequence[biological_window // 2]
         locus.gc_fraction_biological = gc_fraction(biological_sequence)
         locus.biological_sequence = biological_sequence
         locus.model_sequence = model_sequence
-
-    if mismatches:
-        examples = "\n  ".join(mismatches[:10])
-        raise ValueError(
-            f"{len(mismatches)} positive REF alleles do not match the FASTA. "
-            "This usually means the wrong genome build was supplied. Examples:"
-            f"\n  {examples}"
-        )
 
 
 def is_outside_radius(
@@ -286,7 +257,7 @@ def sample_matched_negatives(
     """Sample random unlabeled loci matched by chromosome, REF, and local GC."""
 
     if negative_ratio < 1:
-        raise ValueError("negative_ratio must be at least 1.")
+        raise ValueError("negative_ratio must be at least 1 when sampling.")
     rng = random.Random(seed)
     positive_positions: dict[str, list[int]] = {}
     negative_positions: dict[str, list[int]] = {}
@@ -386,8 +357,9 @@ def sample_matched_negatives(
                     alternate=positive.alternate,
                     gene="",
                     label=0,
-                    label_type="random_unlabeled",
+                    label_type="random_genome_assumed_negative",
                     source="hg38_random_matched",
+                    split=positive.split,
                     gc_fraction_biological=gc_fraction(biological_sequence),
                     biological_sequence=biological_sequence,
                     model_sequence=model_sequence,
@@ -473,10 +445,21 @@ def write_manifest(path: Path, payload: Mapping[str, object]) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Prepare positive and matched-random aging-locus examples from hg38."
+            "Prepare positive aging loci and random controls from TSV "
+            "coordinates and hg38."
         )
     )
-    parser.add_argument("--input-tsv", type=Path, required=True)
+    parser.add_argument("--input-tsv", type=Path)
+    parser.add_argument(
+        "--train-tsv",
+        type=Path,
+        help="Coordinate TSV whose rows receive split=train and label=1.",
+    )
+    parser.add_argument(
+        "--validation-tsv",
+        type=Path,
+        help="Coordinate TSV whose rows receive split=validation and label=1.",
+    )
     parser.add_argument("--reference-fasta", type=Path, required=True)
     parser.add_argument("--output-tsv", type=Path, required=True)
     parser.add_argument("--manifest", type=Path)
@@ -516,31 +499,101 @@ def validate_window_configuration(
 def main() -> int:
     args = parse_args()
     validate_window_configuration(args.biological_window, args.model_window)
-    input_tsv = args.input_tsv.expanduser().resolve()
     reference = IndexedFasta(args.reference_fasta)
 
-    positives = read_positive_loci(input_tsv)
+    using_preassigned_split = (
+        args.train_tsv is not None or args.validation_tsv is not None
+    )
+    if using_preassigned_split:
+        if args.input_tsv is not None:
+            raise ValueError(
+                "Use either --input-tsv or --train-tsv/--validation-tsv, not both."
+            )
+        if args.train_tsv is None or args.validation_tsv is None:
+            raise ValueError(
+                "--train-tsv and --validation-tsv must be supplied together."
+            )
+        train_tsv = args.train_tsv.expanduser().resolve()
+        validation_tsv = args.validation_tsv.expanduser().resolve()
+        train_positives = read_positive_loci(train_tsv, split="train")
+        validation_positives = read_positive_loci(
+            validation_tsv, split="validation"
+        )
+        positives = train_positives + validation_positives
+        duplicate_coordinates = (
+            {
+                (locus.chromosome, locus.position_1based)
+                for locus in train_positives
+            }
+            & {
+                (locus.chromosome, locus.position_1based)
+                for locus in validation_positives
+            }
+        )
+        if duplicate_coordinates:
+            examples = sorted(duplicate_coordinates)[:10]
+            raise ValueError(
+                "Train and validation TSVs overlap at coordinates: "
+                f"{examples}"
+            )
+        input_manifest: object = {
+            "train": {
+                "path": str(train_tsv),
+                "sha256": sha256_file(train_tsv),
+                "positive_rows": len(train_positives),
+            },
+            "validation": {
+                "path": str(validation_tsv),
+                "sha256": sha256_file(validation_tsv),
+                "positive_rows": len(validation_positives),
+            },
+        }
+    else:
+        if args.input_tsv is None:
+            raise ValueError(
+                "Provide --input-tsv or both --train-tsv and --validation-tsv."
+            )
+        input_tsv = args.input_tsv.expanduser().resolve()
+        positives = read_positive_loci(input_tsv)
+        input_manifest = {
+            "path": str(input_tsv),
+            "sha256": sha256_file(input_tsv),
+            "positive_rows": len(positives),
+        }
+
     annotate_positive_sequences(
         positives,
         reference,
         args.biological_window,
         args.model_window,
     )
-    negatives = sample_matched_negatives(
-        positives,
-        reference,
-        biological_window=args.biological_window,
-        model_window=args.model_window,
-        negative_ratio=args.negative_ratio,
-        gc_tolerance=args.gc_tolerance,
-        positive_exclusion_radius=args.positive_exclusion_radius,
-        negative_min_distance=args.negative_min_distance,
-        max_attempts=args.max_attempts,
-        seed=args.seed,
+    negatives = (
+        sample_matched_negatives(
+            positives,
+            reference,
+            biological_window=args.biological_window,
+            model_window=args.model_window,
+            negative_ratio=args.negative_ratio,
+            gc_tolerance=args.gc_tolerance,
+            positive_exclusion_radius=args.positive_exclusion_radius,
+            negative_min_distance=args.negative_min_distance,
+            max_attempts=args.max_attempts,
+            seed=args.seed,
+        )
+        if args.negative_ratio
+        else []
     )
 
     positive_counts = Counter(locus.chromosome for locus in positives)
-    if args.validation_chromosomes:
+    if using_preassigned_split:
+        validation_chromosomes = tuple(
+            sorted(
+                {locus.chromosome for locus in validation_positives},
+                key=natural_chromosome_key,
+            )
+        )
+        split_strategy = "preassigned_coordinate_files"
+    elif args.validation_chromosomes:
         validation_chromosomes = tuple(
             value.strip()
             for value in args.validation_chromosomes.split(",")
@@ -551,15 +604,18 @@ def main() -> int:
             raise ValueError(
                 f"Validation chromosomes have no positives: {sorted(unknown)}"
             )
+        split_strategy = "whole_chromosome_holdout"
     else:
         validation_chromosomes = choose_validation_chromosomes(
             positive_counts,
             args.validation_fraction,
             args.seed,
         )
+        split_strategy = "whole_chromosome_holdout"
 
     loci = positives + negatives
-    assign_splits(loci, validation_chromosomes)
+    if not using_preassigned_split:
+        assign_splits(loci, validation_chromosomes)
     random.Random(args.seed).shuffle(loci)
     write_dataset(args.output_tsv, loci)
 
@@ -568,11 +624,7 @@ def main() -> int:
         args.output_tsv.suffix + ".manifest.json"
     )
     manifest = {
-        "input": {
-            "path": str(input_tsv),
-            "sha256": sha256_file(input_tsv),
-            "positive_rows": len(positives),
-        },
+        "input": input_manifest,
         "reference": {
             "path": str(args.reference_fasta.expanduser().resolve()),
             "assembly": "GRCh38/hg38",
@@ -592,7 +644,7 @@ def main() -> int:
             "seed": args.seed,
         },
         "split": {
-            "strategy": "whole_chromosome_holdout",
+            "strategy": split_strategy,
             "validation_chromosomes": list(validation_chromosomes),
             "counts": {
                 f"{split}_label_{label}": count
@@ -605,13 +657,20 @@ def main() -> int:
         },
         "label_semantics": {
             "1": "known aging-associated positive",
-            "0": "random hg38 locus matched on chromosome, REF, and GC; unlabeled",
+            "0": (
+                "random hg38 context used as an assumed negative for the "
+                "baseline classifier"
+            ),
         },
+        "column_policy": (
+            "Only TSV columns 1 and 2 were read as chromosome and 1-based "
+            "position; all remaining source columns were ignored."
+        ),
     }
     write_manifest(manifest_path, manifest)
 
     validation_positive_count = sum(
-        positive_counts[chrom] for chrom in validation_chromosomes
+        locus.split == "validation" and locus.label == 1 for locus in loci
     )
     print(f"Prepared {len(positives):,} positives and {len(negatives):,} controls.")
     print(

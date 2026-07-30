@@ -1,78 +1,66 @@
 # AlphaGenome aging-locus classifier
 
-This repository now contains the complete first-pass pipeline requested by
-Professor Wang:
+The currently available dataset contains positive aging-associated loci only.
+For a first binary baseline, the active pipeline:
 
-1. validate the supplied positive loci against hg38;
-2. extract a 201 bp sequence (`±100 bp`) around every locus;
-3. construct matched random genomic controls;
-4. make a leakage-resistant 80/20 chromosome split;
-5. extract frozen AlphaGenome trunk embeddings on an HPC GPU;
-6. train a binary linear classification head; and
-7. score new loci with the trained head.
+1. reads only the first two TSV columns (chromosome and 1-based position);
+2. ignores REF, ALT, gene, repeat, and every other annotation column;
+3. extracts a 201 bp sequence (`±100 bp`) around every hg38 locus;
+4. samples one matched random hg38 context as an assumed negative per positive;
+5. preserves the supplied 80/20 chromosome-held-out split;
+6. first trains a compact CNN directly on the 201 bp sequences; and
+7. optionally compares it with a linear head on frozen AlphaGenome features.
 
 No additional “HPC specifications” are required to use the code. Cluster
 account names, Slurm partitions, and module names are site-specific values
 that can be supplied when jobs are submitted.
 
-Here, “HPC specs” only means those cluster-specific values. The scientific
-specification is now fixed by the supervisor's reply: hg38, a 201 bp biological
-window, randomly sampled controls, and an 80/20 evaluation split. If your
-cluster uses Slurm, the only values you normally need to fill in are
-`SLURM_ACCOUNT` and the CPU/GPU partition names; a template is provided at
-[`hpc/site.env.example`](hpc/site.env.example). You do not need to know these
-values to continue developing or testing the Python code locally.
+Here, “HPC specs” only means those cluster-specific values. The current
+scientific inputs are hg38, a centered `±100 bp` biological window, two
+coordinate-only positive TSVs, and their existing 80/20 split.
 
 ## Modeling definition
 
-The first-pass target is:
-
-> distinguish known aging-associated loci from matched, randomly sampled hg38
-> loci and use the learned score to prioritize unseen candidate sites.
-
-This is technically a **positive-unlabeled** problem. Label `0` means a
-randomly sampled, matched hg38 locus; it does not prove that the locus has no
-aging function. Metrics must be interpreted with that limitation.
+Every supplied row has label `1`. For the baseline, each sampled random context
+receives label `0`. These are assumed negatives, not experimentally confirmed
+non-aging loci, so the resulting score is a ranking under this sampled-control
+definition rather than a calibrated probability of aging function.
 
 ### Sequence lengths
 
 - The biological region is exactly 201 bp centered on the locus.
+- The CNN receives only this 201 bp sequence.
 - The AlphaGenome trunk receives 2,048 bp centered on the same locus.
 - The head uses the 1 bp embedding at the center plus a weighted pool of the
   128 bp embeddings overlapping the central 201 bp.
 
-The larger model input is intentional. The released AlphaGenome architecture
-is designed for power-of-two inputs and its pairwise trunk representation
-starts at 2,048 bp. Only the requested central 201 bp is pooled as the primary
-classification region.
+The larger model input is a technical requirement of the released local
+AlphaGenome trunk, whose smallest supported input in this implementation is
+2,048 bp. The locus is centered in that tensor. The head receives the center
+1 bp embedding and a weighted pool of 128 bp embeddings overlapping only the
+central 201 bp, although those embeddings can incorporate information from the
+wider 2,048 bp context.
 
 ### Random controls
 
-For every positive, the default pipeline samples one control that:
-
-- is on the same chromosome;
-- has the same hg38 reference base, preserving the `A>G` / `T>C` composition;
-- is within 0.05 local GC fraction of the positive;
-- has no more than 5% ambiguous bases;
-- is more than 2,048 bp from a known positive; and
-- is at least 201 bp from another sampled control.
-
-Controls remain paired with their source positive in `pair_id`.
+For each positive, the pipeline samples one random hg38 context on the same
+chromosome, with the same center reference base and similar central-window GC
+content. It excludes known positive neighborhoods and keeps the control in the
+same train or validation split as its paired positive. No source annotation
+columns are used for this matching.
 
 ### Split
 
-The split holds out whole chromosomes instead of randomly splitting rows.
-This prevents overlapping or nearby sequence contexts from appearing in both
-sets. With the current 2,132 positives and seed 17, the automatic holdout is
-`chr1,chr8,chr18,chr22`: 426 positives, or 19.98%.
-
-Each control is sampled on the positive's chromosome, so both classes remain
-balanced in the train and validation partitions.
+`RS_PDL50_train_80.tsv` contains 1,706 positive loci on 17 chromosomes.
+`RS_PDL50_test_20.tsv` contains 426 positive loci on 4 held-out chromosomes.
+There is no coordinate overlap between the files.
 
 ## Repository map
 
-- `src/aging_alphagenome/data.py`: hg38 validation, sequence extraction,
-  matched sampling, and grouped splitting.
+- `src/aging_alphagenome/data.py`: coordinate-only hg38 sequence extraction,
+  random-control sampling, and preservation of the supplied split.
+- `src/aging_alphagenome/cnn.py`: compact 201 bp CNN training, internal
+  early-stopping split, final held-out evaluation, and prediction export.
 - `src/aging_alphagenome/features.py`: frozen AlphaGenome embedding
   extraction.
 - `src/aging_alphagenome/head.py`: linear-head training, evaluation, and
@@ -112,9 +100,32 @@ bash "$PROJECT_ROOT/scripts/hpc/bootstrap_env.sh"
 source "$ALPHAGENOME_ENV/bin/activate"
 ```
 
-The bootstrap installs this repository in editable mode and records the
-resolved environment in
-`$ALPHAGENOME_ENV/requirements.freeze.txt`. It is safe to rerun.
+### Conda alternative
+
+For a Conda-managed HPC environment, load your site's Miniconda/Anaconda
+module, set a name, and run:
+
+```bash
+module load miniconda  # use your site's module name
+export PROJECT_ROOT=/shared/path/to/alphagenome-SFT
+export CONDA_ENV_NAME=aging-alphagenome
+export SCRATCH_ROOT=/scratch/YOUR_NETID
+export JAX_CUDA_VARIANT=cuda12
+
+bash "$PROJECT_ROOT/scripts/hpc/create_conda_env.sh"
+conda activate "$CONDA_ENV_NAME"
+```
+
+When home-directory quota is limited, set `SCRATCH_ROOT` to your cluster
+scratch directory. The setup then places Conda package archives, the Conda
+environment, and pip's cache under `${SCRATCH_ROOT}`.
+
+The Conda job scripts detect `CONDA_ENV_NAME` automatically. Do not set both
+`CONDA_ENV_NAME` and `ALPHAGENOME_ENV`; use one environment style per shell.
+
+Both setup scripts install this repository in editable mode and record the
+resolved environment in `requirements.freeze.txt` inside the active
+environment. It is safe to rerun.
 
 Use `JAX_CUDA_VARIANT=cuda13` only with driver 580+. If cluster policy requires
 site-installed CUDA/cuDNN libraries, use `cuda12-local` or `cuda13-local`.
@@ -138,18 +149,28 @@ export HG38_FASTA="$REFERENCE_DIR/GRCh38.p13.genome.fa"
 bash "$PROJECT_ROOT/scripts/data/download_hg38.sh"
 ```
 
-The data-preparation stage checks every TSV `REF` allele against this FASTA and
-stops if they do not match. This prevents silently using the wrong assembly.
+The data-preparation stage derives every sequence directly from this FASTA.
+Only the first two source columns are read; TSV `REF`, `ALT`, and annotations
+are deliberately ignored.
 
 ## 3. Download the fold-0 AlphaGenome checkpoint
 
 Accept the non-commercial model terms at
 [`google/alphagenome-fold-0`](https://huggingface.co/google/alphagenome-fold-0),
-then use a read-only Hugging Face token:
+then activate whichever environment you created and enter a read-only Hugging
+Face token without putting it in shell history:
 
 ```bash
-source "$ALPHAGENOME_ENV/bin/activate"
-export HF_TOKEN='your-read-only-token'
+# Use the activation command for the environment you created:
+if [[ -n "${CONDA_ENV_NAME:-}" ]]; then
+  conda activate "$CONDA_ENV_NAME"              # Conda setup
+else
+  source "$ALPHAGENOME_ENV/bin/activate"        # venv setup
+fi
+
+read -rsp "Hugging Face token: " HF_TOKEN
+echo
+export HF_TOKEN
 export ALPHAGENOME_CHECKPOINT_DIR=/shared/path/to/weights/alphagenome-fold-0
 
 python "$PROJECT_ROOT/scripts/hpc/download_weights.py" \
@@ -159,14 +180,16 @@ python "$PROJECT_ROOT/scripts/hpc/download_weights.py" \
 unset HF_TOKEN
 ```
 
-Do not store the token in this repository or a Slurm job. Fold 0 is used for
-initial evaluation; `all-folds` should be reserved for final inference after
-the methodology is fixed.
+The downloader authenticates with `HF_TOKEN` for this process only; a separate
+`huggingface-cli login` is not required. Do not store the token in this
+repository, `site.env`, or a Slurm job. Fold 0 is used for initial evaluation;
+`all-folds` should be reserved for final inference after the methodology is
+fixed.
 
 ## 4. Verify AlphaGenome on a GPU
 
 ```bash
-export PROJECT_ROOT ALPHAGENOME_ENV ALPHAGENOME_CHECKPOINT_DIR
+export PROJECT_ROOT ALPHAGENOME_CHECKPOINT_DIR
 export ALPHAGENOME_CACHE=/shared/path/to/cache/alphagenome
 
 sbatch \
@@ -182,7 +205,7 @@ A successful log ends with `ALPHAGENOME HPC SMOKE TEST PASSED`.
 Submit the CPU preparation job:
 
 ```bash
-export PROJECT_ROOT ALPHAGENOME_ENV HG38_FASTA
+export PROJECT_ROOT HG38_FASTA
 export OUTPUT_DIR=/shared/path/to/aging-project/data
 
 sbatch \
@@ -193,29 +216,100 @@ sbatch \
 
 This creates:
 
-- `aging_loci.hg38.tsv`: 2,132 positives and 2,132 matched controls, including
-  the 201 bp and 2,048 bp sequences.
-- `aging_loci.hg38.manifest.json`: input hash, reference metadata, sampling
-  settings, holdout chromosomes, counts, and label semantics.
+- `aging_loci.hg38.tsv`: 2,132 positive loci and 2,132 paired random controls
+  with their 201 bp and 2,048 bp hg38 sequences and train/validation
+  assignments.
+- `aging_loci.hg38.manifest.json`: input hashes, reference metadata, counts,
+  split information, and the coordinate-only column policy.
 
 The equivalent direct command is:
 
 ```bash
 aging-prepare-data \
-  --input-tsv "$PROJECT_ROOT/RS_PDL50.wgs.rediportal.vcf.isec.tsv" \
+  --train-tsv "$PROJECT_ROOT/RS_PDL50_train_80.tsv" \
+  --validation-tsv "$PROJECT_ROOT/RS_PDL50_test_20.tsv" \
   --reference-fasta "$HG38_FASTA" \
   --output-tsv "$OUTPUT_DIR/aging_loci.hg38.tsv" \
   --biological-window 201 \
   --model-window 2048 \
   --negative-ratio 1 \
-  --validation-fraction 0.20 \
   --seed 17
 ```
 
-## 6. Extract frozen AlphaGenome features
+## 6. Train and test the 201 bp CNN baseline
+
+This run does not use AlphaGenome or its checkpoint. It reads only
+`biological_sequence`, the 201 bp hg38 context created in step 5. Ten percent
+of the supplied 80% training pairs are reserved internally for early stopping.
+Positive/control pairs stay together. The supplied chromosome-held-out 20%
+split is evaluated only after model selection.
 
 ```bash
-export PROJECT_ROOT ALPHAGENOME_ENV ALPHAGENOME_CHECKPOINT_DIR
+export PROJECT_ROOT=/scratch/hm2991/alphagenome_SFT
+export PREPARED_DATASET=/scratch/hm2991/aging-project/data/processed/aging_loci.hg38.tsv
+export CNN_OUTPUT_DIR=/scratch/hm2991/aging-project/artifacts/cnn
+
+sbatch \
+  --account=YOUR_ACCOUNT \
+  --partition=YOUR_GPU_PARTITION \
+  "$PROJECT_ROOT/hpc/slurm_train_cnn.sbatch"
+```
+
+The roughly 142,000-parameter model has three convolution layers, global
+mean/max pooling, a 128-unit hidden layer, dropout, reverse-complement
+augmentation, and early stopping. It writes:
+
+- `aging_201bp_cnn.npz`: best model parameters;
+- `aging_201bp_cnn.metrics.json`: train, internal-validation, and final-test
+  AUROC, average precision, loss, and accuracy; and
+- `aging_201bp_cnn.test_predictions.tsv`: one score for every held-out
+  positive or random-control locus.
+
+To inspect the final report:
+
+```bash
+python -m json.tool \
+  "$CNN_OUTPUT_DIR/aging_201bp_cnn.metrics.json"
+```
+
+These test metrics measure whether 201 bp local sequence distinguishes the
+known loci from this particular random-control construction. They do not prove
+that the model recognizes aging biology, because the controls are assumed
+negatives and may contain unknown aging-related loci.
+
+### Larger-capacity CNN comparison
+
+After establishing the small baseline, the large preset can test whether more
+capacity and a wider receptive field improve internal-validation performance:
+
+| Preset | Convolution channels | Parameters | Final receptive field |
+| --- | --- | ---: | ---: |
+| `small` | 64, 96, 128 | 141,601 | 46 bp |
+| `large` | 128, 256, 256, 384, 384, 512 | 3,762,305 | 190 bp |
+
+The last three large-model convolutions use dilation factors 2, 2, and 4. Its
+job also increases dropout to 0.40 and weight decay to 0.0005 because the
+training dataset is small relative to the model.
+
+```bash
+export PROJECT_ROOT=/scratch/hm2991/alphagenome_SFT
+export PREPARED_DATASET=/scratch/hm2991/aging-project/data/processed/aging_loci.hg38.tsv
+export LARGE_CNN_OUTPUT_DIR=/scratch/hm2991/aging-project/artifacts/cnn-large
+
+sbatch "$PROJECT_ROOT/hpc/slurm_train_large_cnn.sbatch"
+```
+
+This writes `aging_201bp_large_cnn.npz`,
+`aging_201bp_large_cnn.metrics.json`, and
+`aging_201bp_large_cnn.test_predictions.tsv` without overwriting the small
+model. Both presets use the same seed and pair-grouped internal split, making
+the comparison controlled. Model selection still uses internal-validation
+loss; the held-out test split is evaluated only after the best epoch is fixed.
+
+## 7. Extract frozen AlphaGenome features (optional comparison)
+
+```bash
+export PROJECT_ROOT ALPHAGENOME_CHECKPOINT_DIR
 export PREPARED_DATASET="$OUTPUT_DIR/aging_loci.hg38.tsv"
 export OUTPUT_DIR=/shared/path/to/aging-project/artifacts
 
@@ -227,18 +321,15 @@ sbatch \
 
 The output `aging_loci.alphagenome_features.npz` contains a compact feature
 vector for every example, labels, split assignments, coordinates, and IDs.
-The AlphaGenome trunk remains frozen; only the small downstream head is
-trained.
+The AlphaGenome trunk remains frozen.
 
 For a short pipeline check, add `--limit 8` to the feature command in a copy of
 the job file. Do not train or report metrics from a limited archive.
 
-## 7. Train and evaluate the head
-
-This stage is small and runs on a CPU node:
+## 8. Train and evaluate the AlphaGenome linear head
 
 ```bash
-export PROJECT_ROOT ALPHAGENOME_ENV
+export PROJECT_ROOT
 export OUTPUT_DIR=/shared/path/to/aging-project/artifacts
 export FEATURE_ARCHIVE="$OUTPUT_DIR/aging_loci.alphagenome_features.npz"
 
@@ -248,32 +339,9 @@ sbatch \
   "$PROJECT_ROOT/hpc/slurm_train_head.sbatch"
 ```
 
-Outputs:
-
-- `aging_linear_head.npz`: weights, bias, training-set normalization, and
-  decision threshold.
-- `aging_linear_head.metrics.json`: train and held-out-chromosome loss,
-  accuracy, balanced accuracy, AUROC, and average precision.
-
-The linear head is the interpretable baseline. A nonlinear MLP should only be
-considered after this baseline, negative sampling, and validation design are
-reviewed.
-
-## 8. Score feature archives
-
-After extracting AlphaGenome features for candidate loci with the same window
-and feature settings:
-
-```bash
-aging-score-head \
-  --features candidate_features.npz \
-  --model "$OUTPUT_DIR/aging_linear_head.npz" \
-  --output-tsv candidate_aging_scores.tsv
-```
-
-The `aging_score` is a prioritization score under the sampled-control training
-distribution, not a calibrated probability that a locus biologically causes
-aging.
+This writes `aging_linear_head.npz` and
+`aging_linear_head.metrics.json`. Metrics measure separation from the sampled
+random controls, not separation from experimentally verified non-aging loci.
 
 ## Scheduler customization
 
@@ -284,10 +352,8 @@ equivalent, often `#SBATCH --gpus=1` or `#SBATCH --gres=gpu:h100:1`.
 
 ## Troubleshooting
 
-- **REF mismatch during preparation:** verify that the FASTA is GRCh38/hg38
-  with `chr`-prefixed contigs. Do not bypass this validation.
-- **A control cannot be sampled:** increase `--max-attempts` first; only then
-  consider widening `--gc-tolerance`.
+- **Coordinate missing or out of bounds:** verify that the FASTA is GRCh38/hg38
+  with `chr`-prefixed contigs and that TSV positions are 1-based.
 - **JAX lists only CPU:** confirm `nvidia-smi` works inside the allocation and
   that the environment contains the appropriate JAX CUDA plugin.
 - **Wrong CUDA libraries:** pip CUDA wheels generally work best without a
@@ -301,8 +367,8 @@ equivalent, often `#SBATCH --gpus=1` or `#SBATCH --gres=gpu:h100:1`.
 
 - Whether the prediction unit should ultimately be an editing locus or an
   aggregated gene.
-- Whether random controls should additionally match genic region, repeat
-  class, mappability, and RNA-editing database membership.
+- How robust the classifier is across repeated random-control samples, and
+  whether a scientifically stronger candidate-locus background is available.
 - Whether the 201 bp pooled region should be compared against 301 bp and
   401 bp regions while keeping the AlphaGenome input fixed.
 - Whether validation should follow AlphaGenome's official fold intervals in

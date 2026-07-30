@@ -22,6 +22,13 @@ curl \
 
 if command -v samtools >/dev/null 2>&1; then
   samtools faidx "${HG38_FASTA}"
+elif command -v python >/dev/null 2>&1 \
+  && python -c 'import pyfaidx' >/dev/null 2>&1; then
+  # When Conda is active, use its pyfaidx installation. This also supports
+  # clusters that do not provide samtools on the login/data-transfer node.
+  python -c \
+    'import sys; from pyfaidx import Fasta; Fasta(sys.argv[1], rebuild=True).close()' \
+    "${HG38_FASTA}"
 elif [[ -x "${ALPHAGENOME_ENV}/bin/python" ]]; then
   "${ALPHAGENOME_ENV}/bin/python" -c \
     'import sys; from pyfaidx import Fasta; Fasta(sys.argv[1], rebuild=True).close()' \

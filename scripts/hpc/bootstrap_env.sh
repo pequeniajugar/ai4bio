@@ -51,6 +51,7 @@ else
 fi
 
 "${PYTHON}" -m pip install "alphagenome==${ALPHAGENOME_CLIENT_VERSION}"
+"${PYTHON}" -m pip install --upgrade "huggingface_hub>=0.30"
 
 if [[ -n "${ALPHAGENOME_RESEARCH_SOURCE}" ]]; then
   if [[ ! -f "${ALPHAGENOME_RESEARCH_SOURCE}/pyproject.toml" ]]; then

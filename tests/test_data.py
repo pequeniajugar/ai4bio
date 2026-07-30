@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 from collections import Counter
+from io import StringIO
+from pathlib import Path
 import unittest
+from unittest import mock
 
 from aging_alphagenome.data import (
     Locus,
+    annotate_positive_sequences,
     centered_bounds,
     choose_validation_chromosomes,
     gc_fraction,
+    read_positive_loci,
     sample_matched_negatives,
 )
 
@@ -32,6 +37,47 @@ class DataTest(unittest.TestCase):
 
     def test_gc_fraction_ignores_n(self):
         self.assertAlmostEqual(gc_fraction("ACGTNN"), 0.5)
+
+    def test_coordinate_reader_ignores_all_columns_after_position(self):
+        contents = (
+            "#CHROM\tPOS\tREF\tALT\tGene.refGene\n"
+            "chr1\t3001\tINVALID\tINVALID\tSHOULD_NOT_BE_READ\n"
+        )
+        with mock.patch.object(Path, "open", return_value=StringIO(contents)):
+            loci = read_positive_loci(Path("coordinates.tsv"), split="train")
+
+        self.assertEqual(len(loci), 1)
+        locus = loci[0]
+        self.assertEqual((locus.chromosome, locus.position_1based), ("chr1", 3001))
+        self.assertEqual(locus.label, 1)
+        self.assertEqual(locus.split, "train")
+        self.assertEqual(locus.reference, "")
+        self.assertEqual(locus.alternate, "")
+        self.assertEqual(locus.gene, "")
+
+    def test_sequence_annotation_derives_reference_from_hg38(self):
+        reference = FakeReference({"chr1": "ACGT" * 2000})
+        locus = Locus(
+            sample_id="POS_TRAIN_00001",
+            pair_id="POS_TRAIN_00001",
+            chromosome="chr1",
+            position_1based=3001,
+            start_0based=3000,
+            end_0based=3001,
+            reference="",
+            alternate="",
+            gene="",
+            label=1,
+            label_type="known_positive",
+            source="coordinates.tsv",
+            split="train",
+        )
+
+        annotate_positive_sequences([locus], reference, 201, 2048)
+
+        self.assertEqual(len(locus.biological_sequence), 201)
+        self.assertEqual(len(locus.model_sequence), 2048)
+        self.assertEqual(locus.reference, locus.biological_sequence[100])
 
     def test_chromosome_holdout_is_close_to_twenty_percent(self):
         counts = Counter(
@@ -82,6 +128,7 @@ class DataTest(unittest.TestCase):
             label=1,
             label_type="known_positive",
             source="test",
+            split="train",
             gc_fraction_biological=gc_fraction(biological),
             biological_sequence=biological,
             model_sequence=reference.fetch("chr1", model_start, model_end),
@@ -102,6 +149,8 @@ class DataTest(unittest.TestCase):
         negative = negatives[0]
         self.assertEqual(negative.reference, positive.reference)
         self.assertEqual(negative.chromosome, positive.chromosome)
+        self.assertEqual(negative.label, 0)
+        self.assertEqual(negative.split, "train")
         self.assertLessEqual(
             abs(
                 negative.gc_fraction_biological
