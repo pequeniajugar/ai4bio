@@ -12,6 +12,8 @@ weights/
 data/reference/
 data/processed/
 artifacts/
+hpc/
+scripts/hpc/
 *.npz
 
 # Local secrets
