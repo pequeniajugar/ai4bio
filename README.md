@@ -1,7 +1,14 @@
 # AlphaGenome aging-locus classifier
 
-The currently available dataset contains positive aging-associated loci only.
-For a first binary baseline, the active pipeline:
+The currently available source dataset contains positive aging-associated loci
+only. The repository supports two negative-control constructions:
+
+- a large coordinate-only corpus of random 16,384 bp hg38 regions for
+  AlphaGenome training; and
+- a small one-to-one matched-control dataset for the existing 201 bp CNN
+  baseline.
+
+For the first binary baseline, the small matched-control pipeline:
 
 1. reads only the first two TSV columns (chromosome and 1-based position);
 2. ignores REF, ALT, gene, repeat, and every other annotation column;
@@ -28,6 +35,9 @@ definition rather than a calibrated probability of aging function.
 
 ### Sequence lengths
 
+- Each row in the large negative corpus marks exactly 16,384 bp.
+- A large negative region is eligible only when its full 16,384 bp span does
+  not touch any masked 200 bp aging context.
 - The biological region is exactly 201 bp centered on the locus.
 - The CNN receives only this 201 bp sequence.
 - The AlphaGenome trunk receives 2,048 bp centered on the same locus.
@@ -59,6 +69,8 @@ There is no coordinate overlap between the files.
 
 - `src/aging_alphagenome/data.py`: coordinate-only hg38 sequence extraction,
   random-control sampling, and preservation of the supplied split.
+- `src/aging_alphagenome/negative_data.py`: streaming construction of a large
+  masked, random 16,384 bp negative-region corpus.
 - `src/aging_alphagenome/cnn.py`: compact 201 bp CNN training, internal
   early-stopping split, final held-out evaluation, and prediction export.
 - `src/aging_alphagenome/features.py`: frozen AlphaGenome embedding
@@ -153,7 +165,61 @@ The data-preparation stage derives every sequence directly from this FASTA.
 Only the first two source columns are read; TSV `REF`, `ALT`, and annotations
 are deliberately ignored.
 
-## 3. Download the fold-0 AlphaGenome checkpoint
+## 3. Build the large 16,384 bp negative corpus
+
+The large-corpus generator first centers an exact 200 bp mask on every known
+aging locus in both supplied split files. It then samples unique starts
+uniformly from the hg38 intervals for which the **entire** 16,384 bp region
+does not overlap a mask. Regions with more than 5% non-ACGT sequence are
+rejected.
+
+By default, the job writes one million coordinate-only rows. Keeping sequence
+out of this file is intentional: one million uncompressed 16,384 bp strings
+alone would occupy at least 16.4 GB. Sequence can be fetched from the recorded
+hg38 coordinates during training, or included explicitly for a smaller run
+with `--include-sequence`.
+
+```bash
+export PROJECT_ROOT HG38_FASTA
+export OUTPUT_DIR=/shared/path/to/aging-project/data/processed
+export NEGATIVE_SAMPLES=1000000
+
+sbatch \
+  --account=YOUR_ACCOUNT \
+  --partition=YOUR_CPU_PARTITION \
+  "$PROJECT_ROOT/hpc/slurm_prepare_negatives.sbatch"
+```
+
+The equivalent direct command is:
+
+```bash
+aging-prepare-negatives \
+  --train-tsv "$PROJECT_ROOT/RS_PDL50_train_80.tsv" \
+  --validation-tsv "$PROJECT_ROOT/RS_PDL50_test_20.tsv" \
+  --reference-fasta "$HG38_FASTA" \
+  --output-tsv "$OUTPUT_DIR/aging_negatives_16384bp.tsv.gz" \
+  --mask-bed "$OUTPUT_DIR/aging_mask_200bp.bed" \
+  --manifest "$OUTPUT_DIR/aging_negatives_16384bp.manifest.json" \
+  --number 1000000 \
+  --mask-window 200 \
+  --region-length 16384 \
+  --seed 17
+```
+
+This creates:
+
+- `aging_negatives_16384bp.tsv.gz`: compact AlphaGenome interval rows with
+  label 0, unique starts, and chromosome-held-out split assignments;
+- `aging_mask_200bp.bed`: the merged 200 bp aging-context mask; and
+- `aging_negatives_16384bp.manifest.json`: hashes, parameters, sampling-space
+  size, rejection counts, and per-chromosome output counts.
+
+Negative intervals may overlap one another; this keeps the available corpus
+large. They cannot cross the train/validation boundary because the split is by
+chromosome. These rows are still **assumed negatives**: masking all currently
+known aging loci cannot rule out undiscovered aging-associated sequence.
+
+## 4. Download the fold-0 AlphaGenome checkpoint
 
 Accept the non-commercial model terms at
 [`google/alphagenome-fold-0`](https://huggingface.co/google/alphagenome-fold-0),
@@ -186,7 +252,7 @@ repository, `site.env`, or a Slurm job. Fold 0 is used for initial evaluation;
 `all-folds` should be reserved for final inference after the methodology is
 fixed.
 
-## 4. Verify AlphaGenome on a GPU
+## 5. Verify AlphaGenome on a GPU
 
 ```bash
 export PROJECT_ROOT ALPHAGENOME_CHECKPOINT_DIR
@@ -200,7 +266,7 @@ sbatch \
 
 A successful log ends with `ALPHAGENOME HPC SMOKE TEST PASSED`.
 
-## 5. Prepare training data
+## 6. Prepare the small matched-control training data
 
 Submit the CPU preparation job:
 
@@ -236,10 +302,10 @@ aging-prepare-data \
   --seed 17
 ```
 
-## 6. Train and test the 201 bp CNN baseline
+## 7. Train and test the 201 bp CNN baseline
 
 This run does not use AlphaGenome or its checkpoint. It reads only
-`biological_sequence`, the 201 bp hg38 context created in step 5. Ten percent
+`biological_sequence`, the 201 bp hg38 context created in step 6. Ten percent
 of the supplied 80% training pairs are reserved internally for early stopping.
 Positive/control pairs stay together. The supplied chromosome-held-out 20%
 split is evaluated only after model selection.
@@ -306,7 +372,7 @@ model. Both presets use the same seed and pair-grouped internal split, making
 the comparison controlled. Model selection still uses internal-validation
 loss; the held-out test split is evaluated only after the best epoch is fixed.
 
-## 7. Extract frozen AlphaGenome features (optional comparison)
+## 8. Extract frozen AlphaGenome features (optional comparison)
 
 ```bash
 export PROJECT_ROOT ALPHAGENOME_CHECKPOINT_DIR
@@ -326,7 +392,7 @@ The AlphaGenome trunk remains frozen.
 For a short pipeline check, add `--limit 8` to the feature command in a copy of
 the job file. Do not train or report metrics from a limited archive.
 
-## 8. Train and evaluate the AlphaGenome linear head
+## 9. Train and evaluate the AlphaGenome linear head
 
 ```bash
 export PROJECT_ROOT

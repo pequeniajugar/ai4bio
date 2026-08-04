@@ -13,6 +13,9 @@ data/reference/
 data/processed/
 artifacts/
 hpc/
+!hpc/
+hpc/*
+!hpc/slurm_prepare_negatives.sbatch
 scripts/hpc/
 *.npz
 

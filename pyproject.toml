@@ -14,6 +14,7 @@ dependencies = [
 
 [project.scripts]
 aging-prepare-data = "aging_alphagenome.data:main"
+aging-prepare-negatives = "aging_alphagenome.negative_data:main"
 aging-train-cnn = "aging_alphagenome.cnn:main"
 aging-extract-features = "aging_alphagenome.features:main"
 aging-train-head = "aging_alphagenome.head:train_main"
