@@ -1,0 +1,75 @@
+{
+  "column_policy": "Only TSV columns 1 and 2 were read as chromosome and 1-based position; all remaining source columns were ignored.",
+  "input": {
+    "train": {
+      "path": "/home/tw3090/Alphagenome_Aging_Head/RS_PDL50_train_80.tsv",
+      "positive_rows": 1706,
+      "sha256": "d70a08c30c3a987c7d2c4bb6d941ae44941761ef278ad0480fa01b614ff45162"
+    },
+    "validation": {
+      "path": "/home/tw3090/Alphagenome_Aging_Head/RS_PDL50_test_20.tsv",
+      "positive_rows": 426,
+      "sha256": "321e2b0bfac2acc7bae1a46b944bd2456deb87421c2fa58bdef4906aaa7303e2"
+    }
+  },
+  "label_semantics": {
+    "0": "random hg38 context used as an assumed negative for the baseline classifier",
+    "1": "known aging-associated positive"
+  },
+  "output": {
+    "path": "/home/tw3090/Alphagenome_Aging_Head/aging_loci.hg38.tsv",
+    "rows": 4264
+  },
+  "parameters": {
+    "biological_window": 201,
+    "gc_tolerance": 0.05,
+    "model_window": 2048,
+    "negative_min_distance": 201,
+    "negative_ratio": 1,
+    "positive_exclusion_radius": 2048,
+    "seed": 17,
+    "validation_fraction_requested": 0.2
+  },
+  "reference": {
+    "assembly": "GRCh38/hg38",
+    "path": "/scratch/tw3090/reference/GRCh38.p13.genome.fa",
+    "used_contig_lengths": {
+      "chr1": 248956422,
+      "chr11": 135086622,
+      "chr12": 133275309,
+      "chr13": 114364328,
+      "chr14": 107043718,
+      "chr15": 101991189,
+      "chr16": 90338345,
+      "chr17": 83257441,
+      "chr18": 80373285,
+      "chr19": 58617616,
+      "chr2": 242193529,
+      "chr21": 46709983,
+      "chr22": 50818468,
+      "chr3": 198295559,
+      "chr4": 190214555,
+      "chr5": 181538259,
+      "chr6": 170805979,
+      "chr7": 159345973,
+      "chr8": 145138636,
+      "chr9": 138394717,
+      "chrX": 156040895
+    }
+  },
+  "split": {
+    "counts": {
+      "train_label_0": 1706,
+      "train_label_1": 1706,
+      "validation_label_0": 426,
+      "validation_label_1": 426
+    },
+    "strategy": "preassigned_coordinate_files",
+    "validation_chromosomes": [
+      "chr1",
+      "chr8",
+      "chr18",
+      "chr22"
+    ]
+  }
+}
