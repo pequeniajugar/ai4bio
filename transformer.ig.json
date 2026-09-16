@@ -1,0 +1,2473 @@
+{
+  "baseline": "PAD token embedding",
+  "examples": [
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.983177661895752,
+      "regions": [
+        {
+          "end": 37,
+          "score": 0.6592134237289429,
+          "sequence": "C",
+          "start": 36
+        },
+        {
+          "end": 76,
+          "score": 0.26708030700683594,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 100,
+          "score": 0.6450409889221191,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 104,
+          "score": 0.24206732213497162,
+          "sequence": "G",
+          "start": 103
+        },
+        {
+          "end": 171,
+          "score": 0.27624034881591797,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00330"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9683833122253418,
+      "regions": [
+        {
+          "end": 36,
+          "score": 0.36050915718078613,
+          "sequence": "T",
+          "start": 35
+        },
+        {
+          "end": 76,
+          "score": 0.575262188911438,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 83,
+          "score": 0.4178387522697449,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 100,
+          "score": 0.5309596061706543,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 114,
+          "score": 1.1719398498535156,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00402"
+    },
+    {
+      "label": 0,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9678284525871277,
+      "regions": [
+        {
+          "end": 70,
+          "score": 0.41867271065711975,
+          "sequence": "C",
+          "start": 69
+        },
+        {
+          "end": 85,
+          "score": 0.7663943767547607,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 97,
+          "score": 0.49615755677223206,
+          "sequence": "C",
+          "start": 96
+        },
+        {
+          "end": 100,
+          "score": 0.45063793659210205,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 179,
+          "score": 0.6891671419143677,
+          "sequence": "C",
+          "start": 178
+        }
+      ],
+      "sample_id": "NEG_VALIDATION_00176_01"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9637603759765625,
+      "regions": [
+        {
+          "end": 76,
+          "score": 0.7772886753082275,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 83,
+          "score": 0.9229373931884766,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 100,
+          "score": 0.7954602837562561,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 106,
+          "score": 0.7726184129714966,
+          "sequence": "C",
+          "start": 105
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00134"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9592897295951843,
+      "regions": [
+        {
+          "end": 20,
+          "score": 0.31426993012428284,
+          "sequence": "A",
+          "start": 19
+        },
+        {
+          "end": 83,
+          "score": 0.35683804750442505,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 112,
+          "score": 0.3564262390136719,
+          "sequence": "C",
+          "start": 111
+        },
+        {
+          "end": 153,
+          "score": 0.3877110481262207,
+          "sequence": "C",
+          "start": 152
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00121"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9590696096420288,
+      "regions": [
+        {
+          "end": 37,
+          "score": 0.38208943605422974,
+          "sequence": "T",
+          "start": 36
+        },
+        {
+          "end": 83,
+          "score": 0.556807816028595,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 91,
+          "score": 0.4693570137023926,
+          "sequence": "C",
+          "start": 90
+        },
+        {
+          "end": 100,
+          "score": 0.8004800081253052,
+          "sequence": "C",
+          "start": 99
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00184"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9571336507797241,
+      "regions": [
+        {
+          "end": 37,
+          "score": 0.6911237239837646,
+          "sequence": "TC",
+          "start": 35
+        },
+        {
+          "end": 42,
+          "score": 0.28025656938552856,
+          "sequence": "T",
+          "start": 41
+        },
+        {
+          "end": 100,
+          "score": 0.3466370105743408,
+          "sequence": "C",
+          "start": 99
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00187"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9564746618270874,
+      "regions": [
+        {
+          "end": 83,
+          "score": 0.5985848903656006,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 97,
+          "score": 0.7931435108184814,
+          "sequence": "C",
+          "start": 96
+        },
+        {
+          "end": 100,
+          "score": 0.8356118202209473,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 120,
+          "score": 0.5585867762565613,
+          "sequence": "C",
+          "start": 119
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00142"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9522238373756409,
+      "regions": [
+        {
+          "end": 52,
+          "score": 0.39589154720306396,
+          "sequence": "C",
+          "start": 51
+        },
+        {
+          "end": 76,
+          "score": 0.6015592217445374,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 82,
+          "score": 0.4378887414932251,
+          "sequence": "C",
+          "start": 81
+        },
+        {
+          "end": 100,
+          "score": 0.8622861504554749,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 174,
+          "score": 0.6120038628578186,
+          "sequence": "C",
+          "start": 173
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00137"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9506611824035645,
+      "regions": [
+        {
+          "end": 95,
+          "score": 0.2451637089252472,
+          "sequence": "C",
+          "start": 94
+        },
+        {
+          "end": 106,
+          "score": 0.28625521063804626,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 171,
+          "score": 0.30207395553588867,
+          "sequence": "C",
+          "start": 170
+        },
+        {
+          "end": 192,
+          "score": 0.40418508648872375,
+          "sequence": "T",
+          "start": 191
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00168"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9476783275604248,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.2739950716495514,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 37,
+          "score": 0.642297089099884,
+          "sequence": "TC",
+          "start": 35
+        },
+        {
+          "end": 95,
+          "score": 0.29040226340293884,
+          "sequence": "C",
+          "start": 94
+        },
+        {
+          "end": 100,
+          "score": 0.252625048160553,
+          "sequence": "C",
+          "start": 99
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00118"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9475792646408081,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.3746030926704407,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 37,
+          "score": 0.3872005343437195,
+          "sequence": "C",
+          "start": 36
+        },
+        {
+          "end": 52,
+          "score": 0.33273637294769287,
+          "sequence": "C",
+          "start": 51
+        },
+        {
+          "end": 114,
+          "score": 1.03538978099823,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00075"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9453446865081787,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.32582640647888184,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 83,
+          "score": 0.2804386019706726,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 110,
+          "score": 0.27926868200302124,
+          "sequence": "C",
+          "start": 109
+        },
+        {
+          "end": 171,
+          "score": 0.26738274097442627,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00212"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9448740482330322,
+      "regions": [
+        {
+          "end": 85,
+          "score": 0.44385573267936707,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.36475837230682373,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 114,
+          "score": 1.188063144683838,
+          "sequence": "C",
+          "start": 113
+        },
+        {
+          "end": 171,
+          "score": 0.24761232733726501,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00066"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9397990107536316,
+      "regions": [
+        {
+          "end": 77,
+          "score": 0.28685393929481506,
+          "sequence": "C",
+          "start": 76
+        },
+        {
+          "end": 95,
+          "score": 0.4012294411659241,
+          "sequence": "C",
+          "start": 94
+        },
+        {
+          "end": 100,
+          "score": 0.3664523661136627,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 106,
+          "score": 0.3531220555305481,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 144,
+          "score": 0.28225207328796387,
+          "sequence": "C",
+          "start": 143
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00386"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9393771886825562,
+      "regions": [
+        {
+          "end": 59,
+          "score": 0.3121272623538971,
+          "sequence": "C",
+          "start": 58
+        },
+        {
+          "end": 85,
+          "score": 0.6429591774940491,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 97,
+          "score": 0.4804264307022095,
+          "sequence": "C",
+          "start": 96
+        },
+        {
+          "end": 106,
+          "score": 0.3823493421077728,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 171,
+          "score": 0.40173041820526123,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00031"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9393250942230225,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.2817344665527344,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 36,
+          "score": 0.281119167804718,
+          "sequence": "T",
+          "start": 35
+        },
+        {
+          "end": 85,
+          "score": 0.2544475495815277,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 114,
+          "score": 1.4864248037338257,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00364"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9385321736335754,
+      "regions": [
+        {
+          "end": 20,
+          "score": 0.530899167060852,
+          "sequence": "C",
+          "start": 19
+        },
+        {
+          "end": 76,
+          "score": 0.6100223660469055,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 100,
+          "score": 0.707091212272644,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 153,
+          "score": 0.4430531859397888,
+          "sequence": "C",
+          "start": 152
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00241"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9382306337356567,
+      "regions": [
+        {
+          "end": 97,
+          "score": 0.6204491853713989,
+          "sequence": "C",
+          "start": 96
+        },
+        {
+          "end": 100,
+          "score": 0.8178147077560425,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 106,
+          "score": 0.6941760778427124,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 179,
+          "score": 0.5501396656036377,
+          "sequence": "C",
+          "start": 178
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00314"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9380829334259033,
+      "regions": [
+        {
+          "end": 2,
+          "score": 0.7183778285980225,
+          "sequence": "C",
+          "start": 1
+        },
+        {
+          "end": 20,
+          "score": 0.2893331050872803,
+          "sequence": "C",
+          "start": 19
+        },
+        {
+          "end": 52,
+          "score": 0.3211290240287781,
+          "sequence": "C",
+          "start": 51
+        },
+        {
+          "end": 76,
+          "score": 0.3254237473011017,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 171,
+          "score": 0.35167577862739563,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00192"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.936053454875946,
+      "regions": [
+        {
+          "end": 85,
+          "score": 0.43997836112976074,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 97,
+          "score": 0.4821273386478424,
+          "sequence": "C",
+          "start": 96
+        },
+        {
+          "end": 100,
+          "score": 0.7886193990707397,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 171,
+          "score": 0.40962809324264526,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00012"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9343211650848389,
+      "regions": [
+        {
+          "end": 57,
+          "score": 0.4408966302871704,
+          "sequence": "T",
+          "start": 56
+        },
+        {
+          "end": 83,
+          "score": 0.3679623305797577,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 106,
+          "score": 0.27204909920692444,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 171,
+          "score": 0.3099786341190338,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00179"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9340695142745972,
+      "regions": [
+        {
+          "end": 2,
+          "score": 0.9023653864860535,
+          "sequence": "C",
+          "start": 1
+        },
+        {
+          "end": 52,
+          "score": 0.3879563808441162,
+          "sequence": "C",
+          "start": 51
+        },
+        {
+          "end": 83,
+          "score": 0.4361562430858612,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 192,
+          "score": 0.398752897977829,
+          "sequence": "C",
+          "start": 191
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00307"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9335100650787354,
+      "regions": [
+        {
+          "end": 2,
+          "score": 0.8194279670715332,
+          "sequence": "C",
+          "start": 1
+        },
+        {
+          "end": 76,
+          "score": 0.2838682532310486,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 83,
+          "score": 0.36335912346839905,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 100,
+          "score": 0.5101431608200073,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 191,
+          "score": 0.26728034019470215,
+          "sequence": "C",
+          "start": 190
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00043"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9320029020309448,
+      "regions": [
+        {
+          "end": 76,
+          "score": 0.692642331123352,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 83,
+          "score": 0.7895986437797546,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 100,
+          "score": 1.0234533548355103,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 130,
+          "score": 0.7222515344619751,
+          "sequence": "C",
+          "start": 129
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00141"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9317752122879028,
+      "regions": [
+        {
+          "end": 57,
+          "score": 0.4029933214187622,
+          "sequence": "T",
+          "start": 56
+        },
+        {
+          "end": 171,
+          "score": 0.33271920680999756,
+          "sequence": "C",
+          "start": 170
+        },
+        {
+          "end": 192,
+          "score": 0.587350606918335,
+          "sequence": "CC",
+          "start": 190
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00201"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.930972695350647,
+      "regions": [
+        {
+          "end": 2,
+          "score": 0.9572438597679138,
+          "sequence": "TC",
+          "start": 0
+        },
+        {
+          "end": 110,
+          "score": 0.24821409583091736,
+          "sequence": "C",
+          "start": 109
+        },
+        {
+          "end": 112,
+          "score": 0.31974950432777405,
+          "sequence": "C",
+          "start": 111
+        },
+        {
+          "end": 192,
+          "score": 0.2693067193031311,
+          "sequence": "C",
+          "start": 191
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00347"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9302051067352295,
+      "regions": [
+        {
+          "end": 76,
+          "score": 0.37803351879119873,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 85,
+          "score": 0.3963424563407898,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 89,
+          "score": 0.6124076247215271,
+          "sequence": "C",
+          "start": 88
+        },
+        {
+          "end": 114,
+          "score": 1.4624559879302979,
+          "sequence": "C",
+          "start": 113
+        },
+        {
+          "end": 152,
+          "score": 0.33750367164611816,
+          "sequence": "C",
+          "start": 151
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00375"
+    },
+    {
+      "label": 0,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9284466505050659,
+      "regions": [
+        {
+          "end": 85,
+          "score": 0.41711604595184326,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 97,
+          "score": 0.5896254181861877,
+          "sequence": "C",
+          "start": 96
+        },
+        {
+          "end": 100,
+          "score": 0.8341802954673767,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 191,
+          "score": 0.38153335452079773,
+          "sequence": "C",
+          "start": 190
+        }
+      ],
+      "sample_id": "NEG_VALIDATION_00193_01"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9274933934211731,
+      "regions": [
+        {
+          "end": 57,
+          "score": 0.2629251182079315,
+          "sequence": "A",
+          "start": 56
+        },
+        {
+          "end": 112,
+          "score": 0.5716381669044495,
+          "sequence": "C",
+          "start": 111
+        },
+        {
+          "end": 114,
+          "score": 1.3168150186538696,
+          "sequence": "C",
+          "start": 113
+        },
+        {
+          "end": 152,
+          "score": 0.27508801221847534,
+          "sequence": "C",
+          "start": 151
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00266"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9266337752342224,
+      "regions": [
+        {
+          "end": 37,
+          "score": 0.28203046321868896,
+          "sequence": "T",
+          "start": 36
+        },
+        {
+          "end": 71,
+          "score": 0.33604922890663147,
+          "sequence": "G",
+          "start": 70
+        },
+        {
+          "end": 100,
+          "score": 0.9070026278495789,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 109,
+          "score": 0.31057247519493103,
+          "sequence": "C",
+          "start": 108
+        },
+        {
+          "end": 188,
+          "score": 0.35353487730026245,
+          "sequence": "C",
+          "start": 187
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00092"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9249728322029114,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.422573059797287,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 100,
+          "score": 0.6160969138145447,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 106,
+          "score": 0.364457368850708,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 110,
+          "score": 0.3994208574295044,
+          "sequence": "C",
+          "start": 109
+        },
+        {
+          "end": 114,
+          "score": 1.135280966758728,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00102"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9243120551109314,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.2812471091747284,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 24,
+          "score": 0.38020098209381104,
+          "sequence": "C",
+          "start": 23
+        },
+        {
+          "end": 83,
+          "score": 0.2878122627735138,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 100,
+          "score": 0.3441051244735718,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 153,
+          "score": 0.32187139987945557,
+          "sequence": "C",
+          "start": 152
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00233"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9240342378616333,
+      "regions": [
+        {
+          "end": 2,
+          "score": 1.2060542106628418,
+          "sequence": "C",
+          "start": 1
+        },
+        {
+          "end": 59,
+          "score": 0.5666934251785278,
+          "sequence": "C",
+          "start": 58
+        },
+        {
+          "end": 100,
+          "score": 0.8775767087936401,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 140,
+          "score": 0.39106839895248413,
+          "sequence": "C",
+          "start": 139
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00401"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9240207076072693,
+      "regions": [
+        {
+          "end": 59,
+          "score": 0.6078380942344666,
+          "sequence": "C",
+          "start": 58
+        },
+        {
+          "end": 100,
+          "score": 0.7112798690795898,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 162,
+          "score": 0.563332736492157,
+          "sequence": "C",
+          "start": 161
+        },
+        {
+          "end": 198,
+          "score": 0.5296881198883057,
+          "sequence": "C",
+          "start": 197
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00093"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9235392808914185,
+      "regions": [
+        {
+          "end": 52,
+          "score": 0.6930780410766602,
+          "sequence": "C",
+          "start": 51
+        },
+        {
+          "end": 70,
+          "score": 0.9246957898139954,
+          "sequence": "C",
+          "start": 69
+        },
+        {
+          "end": 83,
+          "score": 0.7379810810089111,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 100,
+          "score": 1.0455234050750732,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 192,
+          "score": 0.6913852095603943,
+          "sequence": "C",
+          "start": 191
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00215"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9233460426330566,
+      "regions": [
+        {
+          "end": 2,
+          "score": 0.6806381344795227,
+          "sequence": "C",
+          "start": 1
+        },
+        {
+          "end": 37,
+          "score": 0.41459476947784424,
+          "sequence": "C",
+          "start": 36
+        },
+        {
+          "end": 100,
+          "score": 0.4543934464454651,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 106,
+          "score": 0.2404594123363495,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 192,
+          "score": 0.19891346991062164,
+          "sequence": "T",
+          "start": 191
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00208"
+    },
+    {
+      "label": 0,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9233205914497375,
+      "regions": [
+        {
+          "end": 76,
+          "score": 0.6888360977172852,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 100,
+          "score": 0.7933461666107178,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 106,
+          "score": 0.5753588676452637,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 153,
+          "score": 0.5244153141975403,
+          "sequence": "C",
+          "start": 152
+        }
+      ],
+      "sample_id": "NEG_VALIDATION_00003_01"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9231920838356018,
+      "regions": [
+        {
+          "end": 36,
+          "score": 0.35412663221359253,
+          "sequence": "T",
+          "start": 35
+        },
+        {
+          "end": 76,
+          "score": 0.43700772523880005,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 85,
+          "score": 0.5087883472442627,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.6072105169296265,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 114,
+          "score": 1.0215537548065186,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00167"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9229201078414917,
+      "regions": [
+        {
+          "end": 70,
+          "score": 0.743610680103302,
+          "sequence": "C",
+          "start": 69
+        },
+        {
+          "end": 75,
+          "score": 0.5200689435005188,
+          "sequence": "C",
+          "start": 74
+        },
+        {
+          "end": 83,
+          "score": 0.6089106202125549,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 130,
+          "score": 0.41047537326812744,
+          "sequence": "C",
+          "start": 129
+        },
+        {
+          "end": 179,
+          "score": 0.4990018308162689,
+          "sequence": "C",
+          "start": 178
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00072"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.922490119934082,
+      "regions": [
+        {
+          "end": 37,
+          "score": 0.34177297353744507,
+          "sequence": "T",
+          "start": 36
+        },
+        {
+          "end": 85,
+          "score": 0.3769974708557129,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.542142391204834,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 171,
+          "score": 0.4476455748081207,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00034"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9196680784225464,
+      "regions": [
+        {
+          "end": 57,
+          "score": 0.43839550018310547,
+          "sequence": "T",
+          "start": 56
+        },
+        {
+          "end": 85,
+          "score": 0.5495253801345825,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.7330033779144287,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 106,
+          "score": 0.5979604125022888,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 112,
+          "score": 0.483913391828537,
+          "sequence": "C",
+          "start": 111
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00243"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9179646968841553,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.2897152304649353,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 37,
+          "score": 0.5429194569587708,
+          "sequence": "C",
+          "start": 36
+        },
+        {
+          "end": 100,
+          "score": 0.5528151392936707,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 192,
+          "score": 0.32160142064094543,
+          "sequence": "C",
+          "start": 191
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00403"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9173464775085449,
+      "regions": [
+        {
+          "end": 37,
+          "score": 0.35465243458747864,
+          "sequence": "T",
+          "start": 36
+        },
+        {
+          "end": 83,
+          "score": 0.33733800053596497,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 100,
+          "score": 0.37278270721435547,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 131,
+          "score": 0.2541464865207672,
+          "sequence": "G",
+          "start": 130
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00087"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.916980504989624,
+      "regions": [
+        {
+          "end": 24,
+          "score": 0.5042252540588379,
+          "sequence": "C",
+          "start": 23
+        },
+        {
+          "end": 83,
+          "score": 0.5685486793518066,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 85,
+          "score": 0.33322644233703613,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.49453264474868774,
+          "sequence": "C",
+          "start": 99
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00416"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9167615175247192,
+      "regions": [
+        {
+          "end": 2,
+          "score": 0.7038835287094116,
+          "sequence": "C",
+          "start": 1
+        },
+        {
+          "end": 97,
+          "score": 0.4519551396369934,
+          "sequence": "C",
+          "start": 96
+        },
+        {
+          "end": 100,
+          "score": 0.4731411337852478,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 114,
+          "score": 1.429521083831787,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00339"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9166902899742126,
+      "regions": [
+        {
+          "end": 37,
+          "score": 0.6416926980018616,
+          "sequence": "C",
+          "start": 36
+        },
+        {
+          "end": 85,
+          "score": 0.502963662147522,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.7972688674926758,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 162,
+          "score": 0.49062198400497437,
+          "sequence": "C",
+          "start": 161
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00228"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9149706363677979,
+      "regions": [
+        {
+          "end": 2,
+          "score": 0.8645491600036621,
+          "sequence": "TC",
+          "start": 0
+        },
+        {
+          "end": 24,
+          "score": 0.23633195459842682,
+          "sequence": "C",
+          "start": 23
+        },
+        {
+          "end": 100,
+          "score": 0.41195881366729736,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 152,
+          "score": 0.34554949402809143,
+          "sequence": "C",
+          "start": 151
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00213"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9102393984794617,
+      "regions": [
+        {
+          "end": 37,
+          "score": 0.3522469699382782,
+          "sequence": "T",
+          "start": 36
+        },
+        {
+          "end": 100,
+          "score": 0.5307313203811646,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 106,
+          "score": 0.37911295890808105,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 114,
+          "score": 0.977545976638794,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00038"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9096419811248779,
+      "regions": [
+        {
+          "end": 37,
+          "score": 0.4278978109359741,
+          "sequence": "T",
+          "start": 36
+        },
+        {
+          "end": 85,
+          "score": 0.48621511459350586,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.5939149856567383,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 112,
+          "score": 0.27353435754776,
+          "sequence": "C",
+          "start": 111
+        },
+        {
+          "end": 171,
+          "score": 0.28844356536865234,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00158"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9096274375915527,
+      "regions": [
+        {
+          "end": 83,
+          "score": 0.23042923212051392,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 98,
+          "score": 0.24720600247383118,
+          "sequence": "G",
+          "start": 97
+        },
+        {
+          "end": 100,
+          "score": 0.6035706996917725,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 114,
+          "score": 0.7007333040237427,
+          "sequence": "C",
+          "start": 113
+        },
+        {
+          "end": 171,
+          "score": 0.22431805729866028,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00076"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9087041616439819,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.3059781491756439,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 37,
+          "score": 0.37014907598495483,
+          "sequence": "C",
+          "start": 36
+        },
+        {
+          "end": 83,
+          "score": 0.3354881703853607,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 114,
+          "score": 1.1621849536895752,
+          "sequence": "C",
+          "start": 113
+        },
+        {
+          "end": 192,
+          "score": 0.33093148469924927,
+          "sequence": "C",
+          "start": 191
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00050"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9085828065872192,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.27589747309684753,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 37,
+          "score": 0.5266437530517578,
+          "sequence": "T",
+          "start": 36
+        },
+        {
+          "end": 83,
+          "score": 0.32864391803741455,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 100,
+          "score": 0.41208720207214355,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 152,
+          "score": 0.38451504707336426,
+          "sequence": "C",
+          "start": 151
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00022"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.904056191444397,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.3138246238231659,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 85,
+          "score": 0.8486542701721191,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.5804057121276855,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 112,
+          "score": 0.41947808861732483,
+          "sequence": "C",
+          "start": 111
+        },
+        {
+          "end": 114,
+          "score": 1.0363671779632568,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00147"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9034143686294556,
+      "regions": [
+        {
+          "end": 57,
+          "score": 0.456068217754364,
+          "sequence": "T",
+          "start": 56
+        },
+        {
+          "end": 76,
+          "score": 0.33487048745155334,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 83,
+          "score": 0.3061951994895935,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 97,
+          "score": 0.4815891981124878,
+          "sequence": "C",
+          "start": 96
+        },
+        {
+          "end": 100,
+          "score": 0.5917869210243225,
+          "sequence": "C",
+          "start": 99
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00132"
+    },
+    {
+      "label": 0,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9032785892486572,
+      "regions": [
+        {
+          "end": 24,
+          "score": 0.5959134101867676,
+          "sequence": "C",
+          "start": 23
+        },
+        {
+          "end": 76,
+          "score": 0.7675076127052307,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 100,
+          "score": 0.9911082983016968,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 182,
+          "score": 0.4292652904987335,
+          "sequence": "C",
+          "start": 181
+        }
+      ],
+      "sample_id": "NEG_VALIDATION_00411_01"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9021300077438354,
+      "regions": [
+        {
+          "end": 2,
+          "score": 1.1112189292907715,
+          "sequence": "C",
+          "start": 1
+        },
+        {
+          "end": 37,
+          "score": 0.4787396788597107,
+          "sequence": "T",
+          "start": 36
+        },
+        {
+          "end": 67,
+          "score": 0.5273775458335876,
+          "sequence": "C",
+          "start": 66
+        },
+        {
+          "end": 100,
+          "score": 0.7244359254837036,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 154,
+          "score": 0.4895942509174347,
+          "sequence": "C",
+          "start": 153
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00371"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9018349647521973,
+      "regions": [
+        {
+          "end": 85,
+          "score": 0.4791228175163269,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 106,
+          "score": 0.4838678538799286,
+          "sequence": "C",
+          "start": 105
+        },
+        {
+          "end": 171,
+          "score": 0.42244279384613037,
+          "sequence": "C",
+          "start": 170
+        },
+        {
+          "end": 174,
+          "score": 0.4289943277835846,
+          "sequence": "C",
+          "start": 173
+        },
+        {
+          "end": 192,
+          "score": 0.4539341628551483,
+          "sequence": "C",
+          "start": 191
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00037"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9015783071517944,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.3481702208518982,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 76,
+          "score": 0.5053737163543701,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 85,
+          "score": 0.35228219628334045,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.7850481271743774,
+          "sequence": "C",
+          "start": 99
+        },
+        {
+          "end": 114,
+          "score": 1.1741306781768799,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00365"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9005213379859924,
+      "regions": [
+        {
+          "end": 52,
+          "score": 0.42979535460472107,
+          "sequence": "C",
+          "start": 51
+        },
+        {
+          "end": 76,
+          "score": 0.5123831033706665,
+          "sequence": "C",
+          "start": 75
+        },
+        {
+          "end": 83,
+          "score": 0.5414397716522217,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 153,
+          "score": 0.5553204417228699,
+          "sequence": "C",
+          "start": 152
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00336"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9005159139633179,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.25775209069252014,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 36,
+          "score": 0.21929292380809784,
+          "sequence": "T",
+          "start": 35
+        },
+        {
+          "end": 100,
+          "score": 0.2655678391456604,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 116,
+          "score": 0.2351371943950653,
+          "sequence": "C",
+          "start": 115
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00177"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.9002219438552856,
+      "regions": [
+        {
+          "end": 28,
+          "score": 0.19806797802448273,
+          "sequence": "C",
+          "start": 27
+        },
+        {
+          "end": 36,
+          "score": 0.21404725313186646,
+          "sequence": "T",
+          "start": 35
+        },
+        {
+          "end": 57,
+          "score": 0.1843748390674591,
+          "sequence": "A",
+          "start": 56
+        },
+        {
+          "end": 83,
+          "score": 0.23497086763381958,
+          "sequence": "C",
+          "start": 82
+        },
+        {
+          "end": 114,
+          "score": 1.2152016162872314,
+          "sequence": "C",
+          "start": 113
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00119"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.8999254703521729,
+      "regions": [
+        {
+          "end": 2,
+          "score": 0.7965198159217834,
+          "sequence": "C",
+          "start": 1
+        },
+        {
+          "end": 37,
+          "score": 0.7920684218406677,
+          "sequence": "C",
+          "start": 36
+        },
+        {
+          "end": 85,
+          "score": 0.8509677648544312,
+          "sequence": "C",
+          "start": 84
+        },
+        {
+          "end": 100,
+          "score": 0.8777393698692322,
+          "sequence": "T",
+          "start": 99
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00414"
+    },
+    {
+      "label": 1,
+      "ngram_counts": {
+        "3": {},
+        "4": {},
+        "5": {}
+      },
+      "predicted_probability": 0.8983410596847534,
+      "regions": [
+        {
+          "end": 1,
+          "score": 0.39137035608291626,
+          "sequence": "T",
+          "start": 0
+        },
+        {
+          "end": 100,
+          "score": 0.5709103345870972,
+          "sequence": "T",
+          "start": 99
+        },
+        {
+          "end": 114,
+          "score": 0.7176740765571594,
+          "sequence": "C",
+          "start": 113
+        },
+        {
+          "end": 171,
+          "score": 0.18373462557792664,
+          "sequence": "C",
+          "start": 170
+        }
+      ],
+      "sample_id": "POS_VALIDATION_00278"
+    }
+  ],
+  "max_examples": 64,
+  "method": "Integrated Gradients on input token embeddings",
+  "ngram_sizes": [
+    3,
+    4,
+    5
+  ],
+  "steps": 32,
+  "threshold_quantile": 0.95,
+  "top_ngrams": {
+    "3": [],
+    "4": [],
+    "5": []
+  }
+}
