@@ -59,6 +59,14 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Optional JSON file with Integrated Gradients region/motif analysis.",
     )
+    parser.add_argument(
+        "--ig-attributions-output",
+        type=Path,
+        help=(
+            "Optional TSV with per-base Integrated Gradients rows for heatmaps. "
+            "Columns include sample_id, position, base, and attribution."
+        ),
+    )
     parser.add_argument("--ig-steps", type=int, default=32)
     parser.add_argument("--max-ig-examples", type=int, default=64)
     parser.add_argument("--ig-region-threshold-quantile", type=float, default=0.95)
@@ -850,6 +858,7 @@ def merge_ngram_counts(
 def write_integrated_gradients_report(
     path: Path,
     *,
+    attributions_output: Path | None,
     jax,
     jnp,
     parameters,
@@ -866,6 +875,7 @@ def write_integrated_gradients_report(
     ordered = test_indices[np.argsort(-probabilities)[:max_examples]]
     examples: list[dict[str, Any]] = []
     aggregate_counts: dict[str, dict[str, int]] = {str(size): {} for size in ngram_sizes}
+    attribution_rows: list[dict[str, Any]] = []
     for index in ordered:
         attributions = integrated_gradients_for_example(
             jax,
@@ -879,15 +889,28 @@ def write_integrated_gradients_report(
             attributions, threshold_quantile=threshold_quantile
         )
         sequence = tokens_to_sequence(tokens[index])
+        probability = float(probabilities[np.where(test_indices == index)[0][0]])
+        for position, (base, attribution) in enumerate(
+            zip(sequence, attributions[: len(sequence)])
+        ):
+            attribution_rows.append(
+                {
+                    "sample_id": str(dataset["sample_id"][index]),
+                    "label": int(dataset["label"][index]),
+                    "predicted_probability": probability,
+                    "position": position,
+                    "relative_position": position - (len(sequence) // 2),
+                    "base": base,
+                    "attribution": float(attribution),
+                }
+            )
         counts = ngram_counts(sequence, regions, ngram_sizes)
         aggregate_counts = merge_ngram_counts(aggregate_counts, counts)
         examples.append(
             {
                 "sample_id": str(dataset["sample_id"][index]),
                 "label": int(dataset["label"][index]),
-                "predicted_probability": float(
-                    probabilities[np.where(test_indices == index)[0][0]]
-                ),
+                "predicted_probability": probability,
                 "regions": [
                     {
                         **region,
@@ -910,6 +933,9 @@ def write_integrated_gradients_report(
         "threshold_quantile": threshold_quantile,
         "max_examples": max_examples,
         "ngram_sizes": ngram_sizes,
+        "attributions_output": str(attributions_output.expanduser().resolve())
+        if attributions_output is not None
+        else None,
         "top_ngrams": top_ngrams,
         "examples": examples,
     }
@@ -921,6 +947,42 @@ def write_integrated_gradients_report(
         encoding="utf-8",
     )
     temporary.replace(path)
+
+    if attributions_output is not None:
+        attributions_output = attributions_output.expanduser().resolve()
+        attributions_output.parent.mkdir(parents=True, exist_ok=True)
+        temporary_attributions = attributions_output.with_suffix(
+            attributions_output.suffix + ".tmp"
+        )
+        with temporary_attributions.open(
+            "w", encoding="utf-8", newline=""
+        ) as handle:
+            fieldnames = [
+                "sample_id",
+                "label",
+                "predicted_probability",
+                "position",
+                "relative_position",
+                "base",
+                "attribution",
+            ]
+            writer = csv.DictWriter(handle, delimiter="\t", fieldnames=fieldnames)
+            writer.writeheader()
+            for row in attribution_rows:
+                writer.writerow(
+                    {
+                        "sample_id": row["sample_id"],
+                        "label": row["label"],
+                        "predicted_probability": (
+                            f"{row['predicted_probability']:.8f}"
+                        ),
+                        "position": row["position"],
+                        "relative_position": row["relative_position"],
+                        "base": row["base"],
+                        "attribution": f"{row['attribution']:.8g}",
+                    }
+                )
+        temporary_attributions.replace(attributions_output)
 
 
 def train(args: argparse.Namespace) -> int:
@@ -934,6 +996,10 @@ def train(args: argparse.Namespace) -> int:
         raise ValueError("Learning rate must be finite and positive.")
     if not np.isfinite(args.weight_decay) or args.weight_decay < 0.0:
         raise ValueError("Weight decay must be finite and non-negative.")
+    if args.ig_attributions_output is not None and args.ig_output is None:
+        raise ValueError(
+            "--ig-attributions-output requires --ig-output so IG is computed."
+        )
 
     dataset = read_dataset(args.dataset, args.sequence_length)
     training_mask, validation_mask, test_mask = make_development_masks(
@@ -1200,6 +1266,7 @@ def train(args: argparse.Namespace) -> int:
     if args.ig_output is not None:
         write_integrated_gradients_report(
             args.ig_output,
+            attributions_output=args.ig_attributions_output,
             jax=jax,
             jnp=jnp,
             parameters=parameters,
@@ -1233,6 +1300,11 @@ def train(args: argparse.Namespace) -> int:
         "test_predictions": str(args.test_predictions.expanduser().resolve()),
         "ig_output": str(args.ig_output.expanduser().resolve())
         if args.ig_output is not None
+        else None,
+        "ig_attributions_output": str(
+            args.ig_attributions_output.expanduser().resolve()
+        )
+        if args.ig_attributions_output is not None
         else None,
         "device": str(device),
         "parameter_count": parameter_count,
@@ -1279,6 +1351,11 @@ def train(args: argparse.Namespace) -> int:
     print(f"Predictions: {args.test_predictions.expanduser().resolve()}")
     if args.ig_output is not None:
         print(f"IG report:   {args.ig_output.expanduser().resolve()}")
+    if args.ig_attributions_output is not None:
+        print(
+            "IG bases:    "
+            f"{args.ig_attributions_output.expanduser().resolve()}"
+        )
     return 0
 
 
