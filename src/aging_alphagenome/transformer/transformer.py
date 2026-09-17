@@ -14,7 +14,7 @@ import hashlib
 import json
 from pathlib import Path
 import time
-from typing import Any
+from typing import Any, Optional
 
 import numpy as np
 
@@ -70,6 +70,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--ig-steps", type=int, default=32)
     parser.add_argument("--max-ig-examples", type=int, default=64)
     parser.add_argument("--ig-region-threshold-quantile", type=float, default=0.95)
+    parser.add_argument(
+        "--ig-split",
+        choices=("train", "internal_validation", "test"),
+        default="test",
+        help="Dataset split to explain with Integrated Gradients.",
+    )
     parser.add_argument("--motif-ngram-sizes", type=int, nargs="+", default=[3, 4, 5])
     return parser.parse_args()
 
@@ -858,7 +864,7 @@ def merge_ngram_counts(
 def write_integrated_gradients_report(
     path: Path,
     *,
-    attributions_output: Path | None,
+    attributions_output: Optional[Path],
     jax,
     jnp,
     parameters,
@@ -866,15 +872,20 @@ def write_integrated_gradients_report(
     tokens: np.ndarray,
     token_mask: np.ndarray,
     probabilities: np.ndarray,
-    test_indices: np.ndarray,
+    explanation_indices: np.ndarray,
+    split_name: str,
     max_examples: int,
     steps: int,
     threshold_quantile: float,
     ngram_sizes: list[int],
 ) -> None:
-    ordered = test_indices[np.argsort(-probabilities)[:max_examples]]
+    ordered = explanation_indices[np.argsort(-probabilities)[:max_examples]]
     examples: list[dict[str, Any]] = []
     aggregate_counts: dict[str, dict[str, int]] = {str(size): {} for size in ngram_sizes}
+    probability_by_index = {
+        int(index): float(probability)
+        for index, probability in zip(explanation_indices, probabilities)
+    }
     attribution_rows: list[dict[str, Any]] = []
     for index in ordered:
         attributions = integrated_gradients_for_example(
@@ -889,7 +900,7 @@ def write_integrated_gradients_report(
             attributions, threshold_quantile=threshold_quantile
         )
         sequence = tokens_to_sequence(tokens[index])
-        probability = float(probabilities[np.where(test_indices == index)[0][0]])
+        probability = probability_by_index[int(index)]
         for position, (base, attribution) in enumerate(
             zip(sequence, attributions[: len(sequence)])
         ):
@@ -929,6 +940,7 @@ def write_integrated_gradients_report(
     payload = {
         "method": "Integrated Gradients on input token embeddings",
         "baseline": "PAD token embedding",
+        "split": split_name,
         "steps": steps,
         "threshold_quantile": threshold_quantile,
         "max_examples": max_examples,
@@ -1273,8 +1285,13 @@ def train(args: argparse.Namespace) -> int:
             dataset=dataset,
             tokens=tokens,
             token_mask=token_mask,
-            probabilities=split_probabilities["test"],
-            test_indices=test_indices,
+            probabilities=split_probabilities[args.ig_split],
+            explanation_indices={
+                "train": training_indices,
+                "internal_validation": validation_indices,
+                "test": test_indices,
+            }[args.ig_split],
+            split_name=args.ig_split,
             max_examples=args.max_ig_examples,
             steps=args.ig_steps,
             threshold_quantile=args.ig_region_threshold_quantile,
